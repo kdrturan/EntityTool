@@ -10,6 +10,7 @@
   <ItemGroup>
     <Folder Include="DataAccess\Concrete\EntityFramework\" />
     <Folder Include="DataAccess\Abstract\" />
+    <Folder Include="Entities\Concrete\" />
   </ItemGroup>
 
 </Project>

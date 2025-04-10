@@ -44,7 +44,7 @@ namespace DataAccess.Abstract
 
 
 
-    static void EfLayer(string entity, string basePath)
+    static void EfLayer(string entity, string context, string basePath)
     {
         string efContent = $@"using Core.DataAccess.EntityFramework;
 using DataAccess.Abstract;
@@ -52,7 +52,7 @@ using Entities.Concrete;
 
 namespace DataAccess.Concrete.EntityFramework
 {{
-     public class Ef{entity}Dal : EfEntityRepositoryBase<{entity}, AnaokuluContext>, I{entity}Dal
+     public class Ef{entity}Dal : EfEntityRepositoryBase<{entity}, {context}>, I{entity}Dal
     {{
     }}
 }}";
@@ -64,7 +64,7 @@ namespace DataAccess.Concrete.EntityFramework
     }
 
 
-     static void CreateFiles(string basePath)
+     static void CreateFiles(string basePath, string context)
     {
         string[] filePaths = Directory.GetFiles(basePath + "\\Entities\\Concrete");
 
@@ -72,8 +72,8 @@ namespace DataAccess.Concrete.EntityFramework
         foreach (string filePath in filePaths)
         {
             string entity = Path.GetFileNameWithoutExtension(filePath);
-            InterfaceLayer(entity, basePath);
-            EfLayer(entity, basePath);
+            InterfaceLayer(entity,basePath);
+            EfLayer(entity, context,basePath);
             Console.WriteLine("--------------------------------------");
             Console.WriteLine($"{entity} ile ilgili 2 dosya oluşturuldu!");
         }
@@ -85,6 +85,7 @@ namespace DataAccess.Concrete.EntityFramework
     static void Main()
     {
         string entity = "";
+        string context;
         string chosen;
         string basePath;
         Console.WriteLine("--------------------------------------");
@@ -92,6 +93,9 @@ namespace DataAccess.Concrete.EntityFramework
         Console.WriteLine("--------------------------------------");
         Console.Write("Sadece Entity dosyaları için 1\nSadece IEntityDal dosyaları için 2\nSadece EfEntityDal dosyaları için 3\nHepsini hazırlamak için 4\nEntity Dosyaları hazırsa 5\nÇıkış için 0: ");
         chosen = Console.ReadLine();
+        Console.WriteLine("--------------------------------------");
+        Console.WriteLine("Context Adını giriniz.");
+        context = Console.ReadLine();
         Console.WriteLine("--------------------------------------");
         Console.WriteLine("Projenin bulunduğu dosya yolunu giriniz.");
         basePath = Console.ReadLine();
@@ -120,15 +124,15 @@ namespace DataAccess.Concrete.EntityFramework
                     InterfaceLayer(entity, basePath);
                     break;
                 case "3":
-                    EfLayer(entity, basePath);
+                    EfLayer(entity, context, basePath);
                     break;
                 case "4":
                     EntityLayer(entity, basePath);
                     InterfaceLayer(entity, basePath);
-                    EfLayer(entity, basePath);
+                    EfLayer(entity, context,basePath);
                     break;
                 case "5":
-                    CreateFiles(basePath);
+                    CreateFiles(basePath, context);
                     return;
                 default:
                     Console.WriteLine("--------------------------------------");
