@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Business\Concrete\" />
+    <Folder Include="Business\Abstract\" />
     <Folder Include="DataAccess\Concrete\EntityFramework\" />
     <Folder Include="DataAccess\Abstract\" />
     <Folder Include="Entities\Concrete\" />

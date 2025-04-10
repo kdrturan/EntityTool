@@ -4,6 +4,50 @@ using System.IO;
 class Program
 {
 
+    static void IService(string entity, string basePath)
+    {
+        string serviceContent = $@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Business.Abstract
+{{
+    public interface I{entity}Service
+    {{
+    }}
+}}
+";
+
+        string entityPath = Path.Combine(basePath, "Business", "Abstract", $"I{entity}Service.cs");
+        File.WriteAllText(entityPath, serviceContent);
+    }
+
+
+    static void Manager(string entity, string basePath)
+    {
+        string serviceContent = $@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Business.Abstract
+{{
+    public class {entity}Manager : I{entity}Service
+    {{
+    }}
+}}
+";
+
+        string entityPath = Path.Combine(basePath, "Business", "Concrete", $"{entity}Manager.cs");
+        File.WriteAllText(entityPath, serviceContent);
+    }
+
+
+
+
     static void EntityLayer(string entity, string basePath)
     {
         string entityContent = $@"using Core.Entities;
@@ -64,7 +108,7 @@ namespace DataAccess.Concrete.EntityFramework
     }
 
 
-     static void CreateFiles(string basePath, string context)
+     static void CreateDataAccessFiles(string basePath, string context)
     {
         string[] filePaths = Directory.GetFiles(basePath + "\\Entities\\Concrete");
 
@@ -80,6 +124,21 @@ namespace DataAccess.Concrete.EntityFramework
     }
 
 
+    static void CreateBusinessFiles(string basePath, string context)
+    {
+        string[] filePaths = Directory.GetFiles(basePath + "\\Entities\\Concrete");
+
+
+        foreach (string filePath in filePaths)
+        {
+            string entity = Path.GetFileNameWithoutExtension(filePath);
+            IService(entity, basePath);
+            Manager(entity, basePath);
+            Console.WriteLine("--------------------------------------");
+            Console.WriteLine($"{entity} ile ilgili 2 dosya oluşturuldu!");
+        }
+    }
+
 
 
     static void Main()
@@ -89,9 +148,10 @@ namespace DataAccess.Concrete.EntityFramework
         string chosen;
         string basePath;
         Console.WriteLine("--------------------------------------");
-        Console.WriteLine("--Entity Dosyaları Entities/Concrete--\n--IEntityDal dosyaları DataAccess/Abstract--\n--EfEntityDosyaları DataAccess/Concrete/EntityFramework--");
+        Console.WriteLine("--Entity Dosyaları Entities/Concrete--\n--IEntityDal dosyaları DataAccess/Abstract--\n--EfEntityDosyaları DataAccess/Concrete/EntityFramework--\n--Business Dosyaları Business/Abstract && Business/Concrete");
         Console.WriteLine("--------------------------------------");
-        Console.Write("Sadece Entity dosyaları için 1\nSadece IEntityDal dosyaları için 2\nSadece EfEntityDal dosyaları için 3\nHepsini hazırlamak için 4\nEntity Dosyaları hazırsa 5\nÇıkış için 0: ");
+        Console.WriteLine("Entity dosyaları için 1\nDataAccess dosyaları için 2\nBusiness Dosyaları için 3\nHepsini hazırlamak için 4");
+        Console.Write("----------Entity Dosyaları hazırsa--------\nDataAccess dosyaları için 5\nBusiness Dosyaları için 6\nÇıkış için 0\nSeçim: ");
         chosen = Console.ReadLine();
         Console.WriteLine("--------------------------------------");
         Console.WriteLine("Context Adını giriniz.");
@@ -104,7 +164,7 @@ namespace DataAccess.Concrete.EntityFramework
 
         while (true)
         {
-            if (chosen != "5")
+            if ("1234".Contains(chosen))
             {
                 Console.WriteLine("--------------------------------------");
                 Console.Write("Çıkış için 0\nEntity adı girin (örnek: Product): ");
@@ -122,17 +182,24 @@ namespace DataAccess.Concrete.EntityFramework
                     break;
                 case "2":
                     InterfaceLayer(entity, basePath);
+                    EfLayer(entity, context, basePath);
                     break;
                 case "3":
-                    EfLayer(entity, context, basePath);
+                    IService(entity, basePath);
+                    Manager(entity,basePath);
                     break;
                 case "4":
                     EntityLayer(entity, basePath);
                     InterfaceLayer(entity, basePath);
                     EfLayer(entity, context,basePath);
+                    IService(entity, basePath);
+                    Manager(entity, basePath);
                     break;
                 case "5":
-                    CreateFiles(basePath, context);
+                    CreateDataAccessFiles(basePath, context);
+                    return;
+                case "6":
+                    CreateBusinessFiles(basePath, context);
                     return;
                 default:
                     Console.WriteLine("--------------------------------------");
