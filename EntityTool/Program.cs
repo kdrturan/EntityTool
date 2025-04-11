@@ -6,18 +6,22 @@ class Program
 
     static void IService(string entity, string basePath)
     {
-        string serviceContent = $@"using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+        string lowEntity = entity.ToLower();
+        string serviceContent = $@"using Core.Utilities.Results;
+using Entities.Concrete;
 
 namespace Business.Abstract
 {{
     public interface I{entity}Service
     {{
+        IResult Add({entity} {lowEntity});
+        IResult Update({entity} {lowEntity});
+        IResult Delete({entity} {lowEntity});
+        IDataResult<{entity}> GetById(int id);
+        IDataResult<List<{entity}>> GetAll();
     }}
 }}
+
 ";
 
         string entityPath = Path.Combine(basePath, "Business", "Abstract", $"I{entity}Service.cs");
@@ -27,19 +31,52 @@ namespace Business.Abstract
 
     static void Manager(string entity, string basePath)
     {
-        string serviceContent = $@"using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Business.Abstract;
+        string lowEntity = entity.ToLower();
+        string serviceContent = $@"using Business.Abstract;
+using Core.Utilities.Results;
+using DataAccess.Abstract;
+using Entities.Concrete;
 
 namespace Business.Concrete
 {{
     public class {entity}Manager : I{entity}Service
     {{
+        I{entity}Dal _{lowEntity}Dal;
+
+        public {entity}Manager(I{entity}Dal {lowEntity}Dal)
+        {{
+            _{lowEntity}Dal = {lowEntity}Dal;
+        }}
+
+        public IResult Add({entity} {lowEntity})
+        {{
+            _{lowEntity}Dal.Add({lowEntity});
+            return new SuccessResult("" eklendi"");
+        }}
+
+        public IResult Delete({entity} {lowEntity})
+        {{
+            _{lowEntity}Dal.Delete({lowEntity});
+            return new SuccessResult();
+        }}
+
+        public IDataResult<List<{entity}>> GetAll()
+        {{
+            return new SuccessDataResult<List<{entity}>>(_{lowEntity}Dal.GetAll(),""Message"");
+        }}
+
+        public IDataResult<{entity}> GetById(int id)
+        {{
+            return new SuccessDataResult<{entity}>(_{lowEntity}Dal.Get(p => p.Id == id));
+        }}
+
+        public IResult Update({entity} {lowEntity})
+        {{
+            throw new NotImplementedException();
+        }}
     }}
 }}
+
 ";
 
         string entityPath = Path.Combine(basePath, "Business", "Concrete", $"{entity}Manager.cs");
