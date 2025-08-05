@@ -1,40 +1,63 @@
-# EntityFileGenerator Tool
+# 🛠️ EntityFileGenerator Tool
 
-Bu araç, .NET projelerinde **Entity**, **Interface** ve **EfEntity** dosyalarını otomatik olarak oluşturmanıza yardımcı olur. Özellikle **Entity Framework** ve **Repository Pattern** kullanan projelerde, her bir entity sınıfı için gerekli temel dosyaları hızlıca oluşturmak için kullanılır.
+**EntityFileGenerator** is a utility designed to automate the creation of **Entity**, **Interface**, and **EfEntity** files in .NET projects. It's especially useful for projects utilizing **Entity Framework** and the **Repository Pattern**, helping developers quickly generate the foundational files required for each entity class.
 
-## Özellikler
+---
 
-- **Entity** dosyasının oluşturulması: Veritabanı tablosuna karşılık gelen entity sınıfını oluşturur.
-- **Interface Layer**: Her entity için gerekli olan DAL (Data Access Layer) arayüzünü oluşturur.
-- **EfEntity Layer**: Entity Framework ile ilgili implementasyonu içeren sınıfı oluşturur.
-- **Dizin Bazlı İşlem**: Belirli bir dizindeki tüm dosyalar üzerinden işlem yaparak ilgili dosyaların hızlıca oluşturulmasını sağlar.
+## ✨ Features
 
-## Kullanım
+- **Entity File Creation**: Generates an entity class that maps to a corresponding database table.
+- **Interface Layer**: Creates the DAL (Data Access Layer) interface for each entity.
+- **EfEntity Layer**: Implements the data access logic using Entity Framework.
+- **Directory-Based Processing**: Reads all files from a specified directory and generates the corresponding entity, interface, and EF files quickly.
 
-1. **Projeye dahil etme**:
-   - Bu araç, .NET projenize dahil edilerek kullanılabilir. `EntityLayer`, `InterfaceLayer`, ve `EfLayer` gibi fonksiyonlar üzerinden işlemlerinizi yönetebilirsiniz.
-   
-2. **Dosya Oluşturma**:
-   - `Directory.GetFiles()` metodu ile belirttiğiniz dizindeki dosyaları okur ve her dosya için ilgili `Entity`, `Interface`, ve `EfEntity` dosyalarını oluşturur.
-   - Dosyalar varsayılan olarak `Entities/Concrete`, `DataAccess/Abstract` ve `DataAccess/Concrete/EntityFramework` dizinlerine kaydedilir.
+---
 
-3. **Kod Kalıbı**:
-   - Dosya içeriği, önceden belirlenmiş bir formatta (entity, interface ve ef repository) otomatik olarak oluşturulur ve yazılır.
+## 🚀 Usage
 
-4. **Özelleştirme**:
-   - Dosya şablonları, `string` formatları ile özelleştirilebilir ve ihtiyaçlarınıza göre genişletilebilir.
+### Integrate into Project
 
-## Kullanıcı Kılavuzu
+This tool can be included in your .NET project. You can manage operations through functions like `EntityLayer`, `InterfaceLayer`, and `EfLayer`.
 
-1. `CreateFiles` fonksiyonu ile mevcut dizindeki dosyaları okuyarak her biri için ilgili dosyaları oluşturabilirsiniz.
-2. `EntityLayer`, `InterfaceLayer`, `EfLayer` fonksiyonlarını kullanarak her dosya tipi için ayrı işlemler gerçekleştirebilirsiniz.
-3. Bu tool, dosyaların aynı dizinde yeniden işlenmesini engellemek için kontroller içerir.
+### File Generation
 
-## Gereksinimler
+- Uses `Directory.GetFiles()` to read files from the specified directory.
+- For each file, it generates the corresponding **Entity**, **Interface**, and **EfEntity** class.
+- Files are saved by default into the following folders:
+  - `Entities/Concrete`
+  - `DataAccess/Abstract`
+  - `DataAccess/Concrete/EntityFramework`
 
-- **.NET Framework**: Bu araç, .NET tabanlı projelerde çalışacak şekilde tasarlanmıştır.
-- **Entity Framework Core**: Veritabanı işlemleri için Entity Framework kullanımı gereklidir.
+### Code Templates
 
-## Katkı
+File contents are generated using pre-defined format strings that define the structure of each file (Entity, Interface, and EF Repository).
 
-Bu projeye katkıda bulunmak isterseniz, pull request gönderebilir ya da açık sorunları çözebilirsiniz. Herhangi bir hata raporlama ya da özellik önerisi için **Issues** bölümünden iletişime geçebilirsiniz.
+### Customization
+
+The format strings for templates can be customized and extended as needed.
+
+---
+
+## 📚 User Guide
+
+- Use the `CreateFiles` function to scan an existing directory and generate all required files.
+- Use `EntityLayer`, `InterfaceLayer`, and `EfLayer` individually to generate each component separately.
+- The tool includes safety checks to prevent overwriting or re-processing already existing files.
+
+---
+
+## 📋 Requirements
+
+- **.NET Framework**: Designed for use within .NET-based projects.
+- **Entity Framework Core**: Required for database operations and EF integration.
+
+---
+
+## 🤝 Contribution
+
+Contributions are welcome! You can:
+- Open a **pull request**
+- Solve existing **issues**
+- Submit suggestions or bug reports via the **Issues** tab
+
+---
